@@ -87,6 +87,7 @@ impl Bucket {
             edge_bucket: &self.inner,
             limit: None,
             prefix: None,
+            start_after: None,
             cursor: None,
             delimiter: None,
             include: None,

@@ -375,6 +375,7 @@ pub struct ListOptionsBuilder<'bucket> {
     pub(crate) edge_bucket: &'bucket EdgeR2Bucket,
     pub(crate) limit: Option<u32>,
     pub(crate) prefix: Option<String>,
+    pub(crate) start_after: Option<String>,
     pub(crate) cursor: Option<String>,
     pub(crate) delimiter: Option<String>,
     pub(crate) include: Option<Vec<Include>>,
@@ -390,6 +391,12 @@ impl<'bucket> ListOptionsBuilder<'bucket> {
     /// The prefix to match keys against. Keys will only be returned if they start with given prefix.
     pub fn prefix(mut self, prefix: impl Into<String>) -> Self {
         self.prefix = Some(prefix.into());
+        self
+    }
+
+    /// Start listing after this key.
+    pub fn start_after(mut self, start_after: impl Into<String>) -> Self {
+        self.start_after = Some(start_after.into());
         self
     }
 
@@ -433,6 +440,7 @@ impl<'bucket> ListOptionsBuilder<'bucket> {
             js_object! {
                 "limit" => self.limit,
                 "prefix" => self.prefix,
+                "startAfter" => self.start_after.map(JsValue::from),
                 "cursor" => self.cursor,
                 "delimiter" => self.delimiter,
                 "include" => self
